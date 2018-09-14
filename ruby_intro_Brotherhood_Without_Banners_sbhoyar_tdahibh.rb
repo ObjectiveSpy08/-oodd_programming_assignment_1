@@ -66,5 +66,31 @@ end
 # Part 3
 
 class Book
-  # ADD YOUR CODE HERE
+  attr_accessor :name, :price
+  DOLLARS = "dollars"
+  CENTS = "cents"
+
+  def initialize(name, price)
+    raise ArgumentError, "Name cannot be empty or nil" if name.nil? || name == ""
+    raise ArgumentError, "Price cannot be nil or zero or negative" if price.nil? || price <= 0
+    @name = name
+    @price = price
+  end
+
+  def formatted_price
+    dollar_value = @price.to_i
+    cents_value = (@price.modulo(1).round(2) * 100).to_i
+    # The final text will includes the "and" word only if both dollars and cents have a value
+    and_text = (dollar_value != 0 && cents_value != 0) ? "and " : ""
+
+    get_formatted_text(dollar_value, DOLLARS) + and_text + get_formatted_text(cents_value, CENTS) + "only"
+  end
+end
+
+def get_formatted_text(value, unit)
+  # If value is 1, remove the s from end of the unit.
+  unit_text = value == 1 ? "#{unit.gsub(/s$/, '')} " : "#{unit} "
+
+  # If the current denomination is 0, return empty string, else return the appropriate text.
+  value == 0 ? "" : "#{value} #{unit_text}"
 end
